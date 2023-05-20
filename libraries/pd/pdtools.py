@@ -132,7 +132,7 @@ class Dataframe:
 
 # """
 # This is the original code. It was changed for bugs correction
-# and improvements by GPT-3.5-turbo model using OpenAi API.
+# and improvements by GPT-3.5-turbo model using OpenAI API.
 # The docstrings were generated # in the same way.
 # """
 

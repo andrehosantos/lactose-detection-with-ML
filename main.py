@@ -1,15 +1,20 @@
 from utils import FileHandler as file_handler
-from libraries.pd.pdtools import Dataframe as df
+from libraries.pd.pdtools import Dataframe as df_handler
+import pandas as pd
+
 
 def main():
     dir = './raw_data'
     concat_dir = './concat'
     files_list = file_handler.get_files(dir)
-    dataframes_list = df(file_path=dir)
+    dataframes_list = df_handler(file_path=dir)
     dataframes = dataframes_list.create_dataframes(files_list, drop_indices=[0])
-    concat_df = df.concatenate_dataframes(dataframes)
-    for k, v in concat_df.items():
-        print(f"{k}\n", v)
+    concat_df = df_handler.concatenate_dataframes(dataframes)
+    for units, concentrations in dataframes.items():
+        print(units)
+        for concentration, df in concentrations.items():
+            print(concentration)
+            print(df[0].shape)
     # for i in range(40,50):
     #     file_path = files[i][2]
     #     dataframe = df(file_path=file_path)
