@@ -105,7 +105,8 @@ class Dataframe:
                 if concentration not in concat_dataframes[units]:
                     concat_dataframes[units][concentration] = []
                 concat_dfs = pd.concat(dfs, axis=0)
-                concat_dataframes[units][concentration].append(concat_dfs)
+                shape = concat_dfs.shape
+                concat_dataframes[units][concentration].append((shape,concat_dfs))
         return concat_dataframes
 
     def concatenate_by_folder(self, files_folders: tuple) -> pd.DataFrame:

@@ -13,7 +13,6 @@ def main():
     for units, concentrations in dataframes.items():
         print(units)
         for concentration, df in concentrations.items():
-            print(concentration)
             print(df[0].shape)
     # for i in range(40,50):
     #     file_path = files[i][2]
