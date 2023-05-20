@@ -128,7 +128,26 @@ class Dataframe:
             conc_df = self.concatenate_dataframes(dataframes)
             df_list.append(conc_df)
         return df_list
+    
+    def get_biggest_dataframe(dataframes: dict) -> pd.DataFrame:
+        """
+        Get the biggest dataframe from a dictionary of dataframes.
 
+        Args:
+            dataframes (dict): A dictionary of dataframes organized by units and concentrations.
+
+        Returns:
+            pd.DataFrame: The biggest dataframe.
+        """
+        biggest_shape = None
+        biggest_df = None
+        for units, concentrations in dataframes.items():
+            for concentration, dfs in concentrations.items():
+                for shape, df in dfs:
+                    if biggest_shape is None or shape[0] > biggest_shape[0]:
+                        biggest_shape = shape
+                        biggest_df = df
+        return (units, concentration, biggest_df)
 
 
 # """

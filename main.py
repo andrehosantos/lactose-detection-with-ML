@@ -10,6 +10,7 @@ def main():
     dataframes_list = df_handler(file_path=dir)
     dataframes = dataframes_list.create_dataframes(files_list, drop_indices=[0])
     concat_df = df_handler.concatenate_dataframes(dataframes)
+    biggest = df_handler.get_biggest_dataframe(concat_df)
     for units, concentrations in dataframes.items():
         print(units)
         for concentration, df in concentrations.items():
