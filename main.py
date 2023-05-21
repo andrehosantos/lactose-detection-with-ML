@@ -1,16 +1,16 @@
 from utils import FileHandler as file_handler
-from libraries.pd.pdtools import Dataframe as df_handler
+from libraries.pd.pdtools import Dataframe as dfs
 import pandas as pd
 
 
 def main():
     dir = './raw_data'
-    concat_dir = './concat'
     files_list = file_handler.get_files(dir)
-    dataframes_list = df_handler(file_path=dir)
-    dataframes = dataframes_list.create_dataframes(files_list, drop_indices=[0])
-    concat_df = df_handler.concatenate_dataframes(dataframes)
-    biggest = df_handler.get_biggest_dataframe(concat_df)
+    dataframes = dfs(files_list)
+    dataframes.create_dataframes(drop_columns=[0])
+    dataframes.concatenate_dataframes()
+    # sorted_df = 
+    biggest = dfs.get_biggest_dataframe(concat_df)
     for units, concentrations in dataframes.items():
         print(units)
         for concentration, df in concentrations.items():

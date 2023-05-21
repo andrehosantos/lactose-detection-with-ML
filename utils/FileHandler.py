@@ -13,7 +13,7 @@ import os
 #         files_list.extend([os.path.join(root, file) for file in files])
 #     return files_list
 
-def get_files(folder_path: str = './', ext: str = '.txt', sep: str = '\t') -> dict:
+def get_files(folder_path: str = './', ext: str = '.txt') -> dict:
     """
     Return a dictionary of all filenames and their corresponding paths given a folder name to look into.
 
@@ -36,19 +36,3 @@ def get_files(folder_path: str = './', ext: str = '.txt', sep: str = '\t') -> di
                 files_dict[units][concentration] = []
             files_dict[units][concentration].append(files_list)
     return files_dict
-
-def groupby_folder(files: tuple) -> tuple:
-    """List all files grouped within the same folder
-
-    Args:
-        files (tuple): a list of all files and folders
-
-    Returns:
-        tuple: a list of files grouped by folders
-    """
-    grouped = {}
-    for concentration, dirpath, filepath in files:
-        if dirpath not in grouped:
-            grouped[dirpath] = []
-        grouped[dirpath].append([filepath, dirpath])
-    return tuple(grouped.items())
