@@ -106,26 +106,6 @@ class Dataframe:
                 shape = concat_dfs.shape
                 self.concat_dataframes[units][concentration].append((shape,concat_dfs))
 
-    def concatenate_by_folder(self, files_folders: tuple) -> pd.DataFrame:
-        """
-        Concatenate multiple files from different folders.
-
-        Args:
-            files_folders (tuple): A tuple containing pairs of folder names and file lists.
-
-        Returns:
-            list: A list of concatenated dataframes.
-        """
-        df_list = []
-        for _, file_list in files_folders:
-            dataframes = []
-            for file in file_list:
-                dataframe = pd.read_csv(file, sep=self.sep)
-                dataframes.append(dataframe)
-            conc_df = self.concatenate_dataframes(dataframes)
-            df_list.append(conc_df)
-        return df_list
-    
     def get_biggest_dataframe(self, dataframes: dict, group: bool = False, column: str = '') -> dict:
         """
         Get the biggest dataframe from a dictionary of dataframes.
