@@ -18,6 +18,7 @@ class Dataframe:
         self.file_path = file_path
         self.sep = sep
         self.dataframes = {}
+        self.concat_dataframes = {}
 
     @staticmethod
     def get_files(dir: str) -> list:
@@ -74,21 +75,18 @@ class Dataframe:
         Returns:
             dict: A dictionary of dataframes organized by units and concentrations.
         """
-        dataframes = {}
         for units, concentrations in files_list.items():
-            if units not in dataframes:
-                dataframes[units] = {}
+            if units not in self.dataframes:
+                self.dataframes[units] = {}
             for concentration, files in concentrations.items():
                 dfs = self.import_data(files)
-                if concentration not in dataframes[units]:
-                    dataframes[units][concentration] = []
+                if concentration not in self.dataframes[units]:
+                    self.dataframes[units][concentration] = []
                 for data_frame in dfs:
                     data_frame = self.drop_columns(data_frame, drop_indices)
-                    dataframes[units][concentration].append(data_frame)
-        return dataframes
+                    self.dataframes[units][concentration].append(data_frame)
 
-    @staticmethod
-    def concatenate_dataframes(pd_dataframes: dict) -> dict:
+    def concatenate_dataframes(self, pd_dataframes: dict) -> dict:
         """
         Concatenate multiple dataframes.
 
@@ -98,17 +96,15 @@ class Dataframe:
         Returns:
             dict: A dictionary of concatenated dataframes organized by units and concentrations.
         """
-        concat_dataframes = {}
         for units, concentrations in pd_dataframes.items():
-            if units not in concat_dataframes:
-                concat_dataframes[units] = {}
+            if units not in self.concat_dataframes:
+                self.concat_dataframes[units] = {}
             for concentration, dfs in concentrations.items():
-                if concentration not in concat_dataframes[units]:
-                    concat_dataframes[units][concentration] = []
+                if concentration not in self.concat_dataframes[units]:
+                    self.concat_dataframes[units][concentration] = []
                 concat_dfs = pd.concat(dfs, axis=0)
                 shape = concat_dfs.shape
-                concat_dataframes[units][concentration].append((shape,concat_dfs))
-        return concat_dataframes
+                self.concat_dataframes[units][concentration].append((shape,concat_dfs))
 
     def concatenate_by_folder(self, files_folders: tuple) -> pd.DataFrame:
         """
@@ -153,7 +149,7 @@ class Dataframe:
                     if biggest_shape is None or shape[0] > biggest_shape[0]:
                         biggest_shape = shape
                         biggest_df[units] = (shape, df)
-        return biggest_df
+        self.concat_dataframes = biggest_df
     
     def group_by(self, dataframes: dict, column: str):
         pass
