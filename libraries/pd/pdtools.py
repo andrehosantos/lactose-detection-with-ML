@@ -1,21 +1,23 @@
 import os
 import pandas as pd
 
+from utils.FileHandler import get_files
+
 
 class Dataframe:
     """
     Custom DataFrame class with additional functionality.
     """
 
-    def __init__(self, file_path: str = './', sep: str = '\t') -> None:
+    def __init__(self, file_list: dict, sep: str = '\t') -> None:
         """
         Initialize the Dataframe object.
 
         Args:
-            file_path (str): The path to the file or directory.
+            file_list (str): The path to the file or directory.
             sep (str): The delimiter used in the file (default is '\t' for tab-separated files).
         """
-        self.file_path = file_path
+        self.file_list = file_list
         self.sep = sep
         self.dataframes = {}
         self.concat_dataframes = {}
@@ -48,7 +50,7 @@ class Dataframe:
         """
         return df.drop(df.columns[indices], axis=1)
 
-    def create_dataframes(self, files_list: dict, drop_indices: list) -> dict:
+    def create_dataframes(self, drop_columns: list) -> dict:
         """
         Create multiple dataframes from a dictionary of files.
 
@@ -59,18 +61,21 @@ class Dataframe:
         Returns:
             dict: A dictionary of dataframes organized by units and concentrations.
         """
-        for units, concentrations in files_list.items():
+        for units, concentrations in self.file_list.items():
             if units not in self.dataframes:
                 self.dataframes[units] = {}
-            for concentration, files in concentrations.items():
-                dfs = self.import_data(files)
+            for concentration, files_list in concentrations.items():
+                dfs = self.import_data(files_list)
                 if concentration not in self.dataframes[units]:
                     self.dataframes[units][concentration] = []
-                for data_frame in dfs:
-                    data_frame = self.drop_columns(data_frame, drop_indices)
-                    self.dataframes[units][concentration].append(data_frame)
+                if drop_columns:
+                    for i, data_frame in enumerate(dfs):
+                        data_frame = self.drop_columns(data_frame, drop_columns)
+                        self.dataframes[units][concentration].append(data_frame)  # Append individual DataFrame
+                else:
+                    self.dataframes[units][concentration].extend(dfs)  # Append the entire list of DataFrames
 
-    def concatenate_dataframes(self, pd_dataframes: dict) -> dict:
+    def concatenate_dataframes(self) -> dict:
         """
         Concatenate multiple dataframes.
 
@@ -80,7 +85,7 @@ class Dataframe:
         Returns:
             dict: A dictionary of concatenated dataframes organized by units and concentrations.
         """
-        for units, concentrations in pd_dataframes.items():
+        for units, concentrations in self.dataframes.items():
             if units not in self.concat_dataframes:
                 self.concat_dataframes[units] = {}
             for concentration, dfs in concentrations.items():
@@ -130,9 +135,9 @@ class Dataframe:
     
 
 # class Dataframe(pd.DataFrame):
-#     def __init__(self, file_path: str = './', sep: str = '\t') -> None:
+#     def __init__(self, file_list: str = './', sep: str = '\t') -> None:
 #         super().__init__()
-#         self.file_path = file_path
+#         self.file_list = file_list
 #         self.sep = sep
 #         self.dataframes = {}
     
