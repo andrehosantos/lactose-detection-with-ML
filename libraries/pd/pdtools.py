@@ -17,6 +17,7 @@ class Dataframe:
         """
         self.file_path = file_path
         self.sep = sep
+        self.dataframes = {}
 
     @staticmethod
     def get_files(dir: str) -> list:
@@ -129,7 +130,7 @@ class Dataframe:
             df_list.append(conc_df)
         return df_list
     
-    def get_biggest_dataframe(dataframes: dict) -> pd.DataFrame:
+    def get_biggest_dataframe(self, dataframes: dict, group: bool = False, column: str = '') -> dict:
         """
         Get the biggest dataframe from a dictionary of dataframes.
 
@@ -140,14 +141,22 @@ class Dataframe:
             pd.DataFrame: The biggest dataframe.
         """
         biggest_shape = None
-        biggest_df = None
+        biggest_df = {}
+        if group:
+            grouped = self.group_by(dataframes, column)
+        
         for units, concentrations in dataframes.items():
+            if units not in biggest_df:
+                biggest_df[units] = {}
             for concentration, dfs in concentrations.items():
                 for shape, df in dfs:
                     if biggest_shape is None or shape[0] > biggest_shape[0]:
                         biggest_shape = shape
-                        biggest_df = df
-        return (units, concentration, biggest_df)
+                        biggest_df[units] = (shape, df)
+        return biggest_df
+    
+    def group_by(self, dataframes: dict, column: str):
+        pass
 
 
 # """
