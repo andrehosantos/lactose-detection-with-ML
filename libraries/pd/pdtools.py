@@ -92,10 +92,9 @@ class Dataframe:
                 if concentration not in self.concat_dataframes[units]:
                     self.concat_dataframes[units][concentration] = []
                 concat_dfs = pd.concat(dfs, axis=0)
-                shape = concat_dfs.shape
-                self.concat_dataframes[units][concentration].append((shape,concat_dfs))
+                self.concat_dataframes[units][concentration].append(concat_dfs)
 
-    def get_biggest_dataframe(self, dataframes: dict, group: bool = False, column: str = '') -> dict:
+    def get_biggest_dataframe(self, concatenated: bool = False) -> dict:
         """
         Get the biggest dataframe from a dictionary of dataframes.
 
@@ -107,20 +106,25 @@ class Dataframe:
         """
         biggest_shape = None
         biggest_df = {}
-        if group:
-            grouped = self.group_by(dataframes, column)
-        
-        for units, concentrations in dataframes.items():
-            if units not in biggest_df:
-                biggest_df[units] = {}
-            for concentration, dfs in concentrations.items():
-                for shape, df in dfs:
-                    if biggest_shape is None or shape[0] > biggest_shape[0]:
-                        biggest_shape = shape
-                        biggest_df[units] = (shape, df)
-        self.concat_dataframes = biggest_df
+
+        dataframes = self.dataframes
+        if concatenated:
+            dataframes = self.concat_dataframes
+        biggest_dataframes = {}
     
-    def group_by(self, dataframes: dict, column: str):
+        for units, concentrations in dataframes.items():
+            if units not in biggest_dataframes:
+                biggest_dataframes[units] = None
+            biggest_df = None
+            max_shape = (0,0)
+            for concentration, dfs in concentrations.items():
+                for df in dfs:
+                    if df.shape > max_shape:
+                        max_shape = df.shape
+                        biggest_dataframes[units] = df
+        return biggest_dataframes
+    
+    def groupdf_by(self, dataframes: dict, column: str) -> dict:
         pass
 
 
