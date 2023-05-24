@@ -10,11 +10,11 @@ def main():
     dataframes.create_dataframes(drop_columns=[0])
     dataframes.concatenate_dataframes()
     # sorted_df = 
-    biggest = dfs.get_biggest_dataframe(concat_df)
+    biggest = dataframes.get_biggest_dataframe()
     for units, concentrations in dataframes.items():
         print(units)
         for concentration, df in concentrations.items():
-            print(df[0].shape)
+            print(concentration, df)
     # for i in range(40,50):
     #     file_path = files[i][2]
     #     dataframe = df(file_path=file_path)
