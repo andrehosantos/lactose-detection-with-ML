@@ -71,10 +71,13 @@ class Dataframe:
                         self.dataframes[units][concentration].append(data_frame)
                         
 
-    def concatenate_dataframes(self) -> None:
+    def concatenate_dataframes(self, concat_all: bool = False) -> None:
         """
         Concatenate multiple dataframes.
         """
+        if concat_all:
+            self.concatenate_all_dataframes()
+            return
         for units, concentrations in self.dataframes.items():
             if units not in self.concat_dataframes:
                 self.concat_dataframes[units] = {}
@@ -83,6 +86,18 @@ class Dataframe:
                     self.concat_dataframes[units][concentration] = []
                 concat_dfs = pd.concat(dfs, axis=0)
                 self.concat_dataframes[units][concentration].append(concat_dfs)
+
+    def concatenate_all_dataframes(self) -> None:
+        """
+        Concatenate multiple dataframes.
+        """
+        for units, concentrations in self.dataframes.items():
+            all_dfs = []
+            if units not in self.dataframes.items():
+                self.concat_dataframes[units] = []
+            for concentration, dfs in concentrations.items():
+                all_dfs.extend(dfs)
+            self.concat_dataframes[units].append(pd.concat(all_dfs))
 
     def get_biggest_dataframe(self, concatenated: bool = False) -> dict:
         """
