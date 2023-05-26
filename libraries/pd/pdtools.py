@@ -64,12 +64,13 @@ class Dataframe:
                 dfs = self.import_data(files_list)
                 if concentration not in self.dataframes[units]:
                     self.dataframes[units][concentration] = []
-                if drop_columns:
-                    for i, data_frame in enumerate(dfs):
-                        data_frame = self.drop_columns(data_frame, drop_columns)
+                    self.dataframes[units][concentration]
+                    for data_frame in dfs:
+                        if drop_columns:
+                            data_frame = self.drop_columns(data_frame, drop_columns)
+                        data_frame[units] = int(concentration)
                         self.dataframes[units][concentration].append(data_frame)
-                else:
-                    self.dataframes[units][concentration].extend(dfs)
+                        
 
     def concatenate_dataframes(self) -> None:
         """
