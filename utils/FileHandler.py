@@ -34,5 +34,5 @@ def get_files(folder_path: str = './', ext: str = '.txt') -> dict:
                 files_dict[units] = {}
             if concentration not in files_dict[units]:
                 files_dict[units][concentration] = []
-            files_dict[units][concentration].append(files_list)
+            files_dict[units][concentration].extend(files_list)
     return files_dict
