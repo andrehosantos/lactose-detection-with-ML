@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 
 from utils.FileHandler import get_files
