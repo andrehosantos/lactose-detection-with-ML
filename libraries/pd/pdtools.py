@@ -49,7 +49,7 @@ class Dataframe:
         """
         return df.drop(df.columns[indices], axis=1)
 
-    def create_dataframes(self, drop_columns: list) -> None:
+    def create_dataframes(self, drop_columns: list = None) -> None:
         """
         Create multiple dataframes from a dictionary of files.
 
