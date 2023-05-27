@@ -7,15 +7,13 @@ def main():
     dir = './raw_data'
     files_list = file_handler.get_files(dir)
     dataframes = dfs(files_list)
-    dataframes.create_dataframes(drop_columns=[0])
-    dataframes.concatenate_dataframes()
+    dataframes.create_dataframes(drop_columns=[0, 5])
+    dataframes.concatenate_dataframes(concat_all=True)
     # sorted_df = 
-    biggest = dataframes.get_biggest_dataframe()
-    for units, concentrations in dataframes.items():
-        print(units)
-        for concentration, df in concentrations.items():
-            print(concentration, df)
-    # for i in range(40,50):
+    biggest = dataframes.get_biggest_dataframe(concatenated=True)
+    for units, df in biggest.items():
+        print(df.shape)
+        print(df.groupby("Frequency (Hz)").agg(['mean', 'std', 'skew']).head())
     #     file_path = files[i][2]
     #     dataframe = df(file_path=file_path)
     #     result = dataframe.create_dataframe()
