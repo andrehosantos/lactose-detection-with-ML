@@ -20,6 +20,7 @@ class Dataframe:
         self.sep = sep
         self.dataframes = {}
         self.concat_dataframes = {}
+        self.np_array = {}
 
     def import_data(self, files_list: list) -> list:
         """
@@ -136,3 +137,12 @@ class Dataframe:
             dict: A dictionary of grouped dataframes.
         """
         pass
+    
+    def pandas_to_numpy(self):
+        for units, concentrations in self.dataframes.items():
+            if units not in self.np_array:
+                self.np_array[units] = []
+            for concentration, dfs in concentrations.items():
+                for df in dfs:
+                    features = df.drop(units, axis=1).values
+                    self.np_array[units].append([features, float(concentration)])
