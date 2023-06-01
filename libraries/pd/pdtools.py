@@ -141,8 +141,11 @@ class Dataframe:
     def pandas_to_numpy(self):
         for units, concentrations in self.dataframes.items():
             if units not in self.np_array:
-                self.np_array[units] = []
+                self.np_array[units] = {}
+                self.np_array[units]['features'] = []
+                self.np_array[units]['target'] = []
             for concentration, dfs in concentrations.items():
                 for df in dfs:
                     features = df.drop(units, axis=1).values
-                    self.np_array[units].append([features, float(concentration)])
+                    self.np_array[units]['features'].append(features)
+                    self.np_array[units]['target'].append(float(concentration))
