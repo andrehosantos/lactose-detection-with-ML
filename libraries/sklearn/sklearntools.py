@@ -24,7 +24,10 @@ class Data:
         self.test_ratio = test
         self.val_ratio = val
         self.target_name = target_name
-        self.features = self.df.columns[:-1]
+        if isinstance(self.df, dict):
+            self.features = self.df['features']
+        else:
+            self.features = self.df.columns[:-1]
         self.test_size = self.test_ratio + self.val_ratio
         self.test_val_df = []
         self.train_df = []
@@ -49,6 +52,19 @@ class Data:
                                                          test_size=1-self.val_ratio,
                                                          stratify=self.test_val_df["Frequency (Hz)"], 
                                                          random_state=self.RANDOM_STATE)
+    @staticmethod
+    def split_np_data(np_arrays,
+                      train: float = 0.8,
+                      test: float = 0.2,
+                      val: float = 0,
+                      random_state: int = 42):
+        test_size = test + val
+        train_df, test_val_df = train_test_split(np_arrays, test_size=test_size,random_state=random_state)
+        if val:
+            test_df, val_df = train_test_split(test_val_df, test_size=1-val,
+                                                         random_state=random_state)
+            return test_df, train_df, val_df
+        return train_df, test_val_df
 
     def transform_data(self):
         power_transformer = preprocessing.PowerTransformer(method='yeo-johnson')
