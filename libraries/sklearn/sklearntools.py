@@ -54,15 +54,17 @@ class Data:
                                                          random_state=self.RANDOM_STATE)
     @staticmethod
     def split_np_data(np_arrays,
-                      train: float = 0.8,
                       test: float = 0.2,
                       val: float = 0,
                       random_state: int = 42):
         test_size = test + val
-        train_df, test_val_df = train_test_split(np_arrays, test_size=test_size,random_state=random_state)
+        train_df, test_val_df = train_test_split(np_arrays,
+                                                 test_size=test_size,
+                                                 random_state=random_state)
         if val:
-            test_df, val_df = train_test_split(test_val_df, test_size=1-val,
-                                                         random_state=random_state)
+            test_df, val_df = train_test_split(test_val_df,
+                                               test_size=1-val,
+                                               random_state=random_state)
             return test_df, train_df, val_df
         return train_df, test_val_df
 
