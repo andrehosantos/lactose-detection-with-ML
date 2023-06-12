@@ -98,7 +98,7 @@ class Dataframe:
                 self.concat_dataframes[units] = []
             for concentration, dfs in concentrations.items():
                 all_dfs.extend(dfs)
-            self.concat_dataframes[units].append(pd.concat(all_dfs))
+            self.concat_dataframes[units] = pd.concat(all_dfs)
 
     def get_biggest_dataframe(self, concatenated: bool = False) -> dict:
         """
